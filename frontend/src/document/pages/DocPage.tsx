@@ -29,13 +29,13 @@ export default function DocPage() {
   return (
     <>
       <DocHeader onFileSelected={handleFileSelected} />
-      {docdetails.map((doc)=>{
+      {docdetails.map((doc)=>(
         <DocDetail
             pages={doc.pages}
             docName={doc.docName}
             chunks={doc.chunks}
         />
-      })}
+      ))}
       
     </>
   );
