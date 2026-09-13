@@ -15,6 +15,8 @@ export default function DocPage() {
     if (files.length === 0) return;
 
     const file = files[files.length - 1];
+    const path = URL.createObjectURL(file);
+
 
     updateDocDetails((previousDetails) => [
       ...previousDetails,
@@ -22,6 +24,7 @@ export default function DocPage() {
         docName: file.name,
         pages: 0,
         chunks: 0,
+        path:path
       },
     ]);
   }, [files]);
@@ -34,6 +37,7 @@ export default function DocPage() {
             pages={doc.pages}
             docName={doc.docName}
             chunks={doc.chunks}
+            path={doc.path}
         />
       ))}
       
