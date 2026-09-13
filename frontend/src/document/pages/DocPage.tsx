@@ -55,19 +55,27 @@ export default function DocPage() {
   }, [files]);
 
   return (
-    <>
+    <div className="flex flex-col h-full gap-4">
       <DocHeader onFileSelected={handleFileSelected} />
 
-      {docdetails.map((doc) => (
-        <DocDetail
-          key={doc.docName}
-          pages={doc.pages}
-          docName={doc.docName}
-          chunks={doc.chunks}
-          path={doc.path}
-          onDelete={doc.onDelete}
-        />
-      ))}
-    </>
+      <div className="flex flex-col gap-3 overflow-y-auto pr-1">
+        {docdetails.length === 0 ? (
+          <div className="text-center text-gray-500 text-sm mt-8 border-2 border-dashed border-gray-200 rounded-lg p-6">
+            No documents uploaded yet.
+          </div>
+        ) : (
+          docdetails.map((doc) => (
+            <DocDetail
+              key={doc.docName}
+              pages={doc.pages}
+              docName={doc.docName}
+              chunks={doc.chunks}
+              path={doc.path}
+              onDelete={doc.onDelete}
+            />
+          ))
+        )}
+      </div>
+    </div>
   );
 }

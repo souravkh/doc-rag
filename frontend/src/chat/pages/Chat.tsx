@@ -38,28 +38,37 @@ function Chat() {
   };
 
   return (
-    <div className="chat">
-      <div className="chat-window">
-        {messages.map((message) => {
-          if (message.role === "user") {
+    <div className="flex flex-col h-full bg-white relative">
+      <div className="flex-1 overflow-y-auto p-4 space-y-6 pb-24">
+        {messages.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-full text-gray-400 space-y-4">
+            <svg className="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+            <p className="text-lg">Upload a document and start asking questions.</p>
+          </div>
+        ) : (
+          messages.map((message) => {
+            if (message.role === "user") {
+              return (
+                <UserChatBlock
+                  key={message.id}
+                  message={message.message}
+                />
+              );
+            }
+
             return (
-              <UserChatBlock
+              <AiChatBlock
                 key={message.id}
                 message={message.message}
               />
             );
-          }
-
-          return (
-            <AiChatBlock
-              key={message.id}
-              message={message.message}
-            />
-          );
-        })}
+          })
+        )}
       </div>
 
-      <ChatInput onSend={handleSend} />
+      <div className="absolute bottom-0 w-full p-4 bg-gradient-to-t from-white via-white to-transparent">
+        <ChatInput onSend={handleSend} />
+      </div>
     </div>
   );
 }
