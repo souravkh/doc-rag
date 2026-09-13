@@ -3,6 +3,7 @@ export type docdetailstype={
     pages: number,
     chunks: number,
     path:string,
+    onDelete: (docName : string)=>void
 }
 
 export type DocHeaderProps = {

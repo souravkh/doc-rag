@@ -7,6 +7,24 @@ export default function DocPage() {
   const [files, updateFiles] = useState<File[]>([]);
   const [docdetails, updateDocDetails] = useState<docdetailstype[]>([]);
 
+  const handleOnDeleteOfDocument = (docName: string) => {
+    const documentToDelete = docdetails.find(
+      (doc) => doc.docName === docName
+    );
+
+    if (documentToDelete) {
+      URL.revokeObjectURL(documentToDelete.path);
+    }
+
+    updateFiles((previousFiles) =>
+      previousFiles.filter((file) => file.name !== docName)
+    );
+
+    updateDocDetails((previousDetails) =>
+      previousDetails.filter((doc) => doc.docName !== docName)
+    );
+  };
+
   const handleFileSelected = (file: File) => {
     updateFiles((previousFiles) => [...previousFiles, file]);
   };
@@ -15,8 +33,14 @@ export default function DocPage() {
     if (files.length === 0) return;
 
     const file = files[files.length - 1];
-    const path = URL.createObjectURL(file);
 
+    const alreadyExists = docdetails.some(
+      (doc) => doc.docName === file.name
+    );
+
+    if (alreadyExists) return;
+
+    const path = URL.createObjectURL(file);
 
     updateDocDetails((previousDetails) => [
       ...previousDetails,
@@ -24,7 +48,8 @@ export default function DocPage() {
         docName: file.name,
         pages: 0,
         chunks: 0,
-        path:path
+        path: path,
+        onDelete: handleOnDeleteOfDocument,
       },
     ]);
   }, [files]);
@@ -32,15 +57,17 @@ export default function DocPage() {
   return (
     <>
       <DocHeader onFileSelected={handleFileSelected} />
-      {docdetails.map((doc)=>(
+
+      {docdetails.map((doc) => (
         <DocDetail
-            pages={doc.pages}
-            docName={doc.docName}
-            chunks={doc.chunks}
-            path={doc.path}
+          key={doc.docName}
+          pages={doc.pages}
+          docName={doc.docName}
+          chunks={doc.chunks}
+          path={doc.path}
+          onDelete={doc.onDelete}
         />
       ))}
-      
     </>
   );
 }
